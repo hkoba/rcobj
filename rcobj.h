@@ -28,17 +28,24 @@ limitations under the License.
  */
 
 /*
- * class rcobj -- 異常系と正常系、両方に利用可能な戻値オブジェクト.
+ * class rcobj -- lightweight "return code" object for normal cases and errors.
  *
- * 構造体戻値ではあるが、サイズは void* と同じサイズなので比較的低コストと
- * 期待できる。
+ * For normal cases, this object has value from 0 to 3, which encodes
  *
- * 正常時は
+ *  bit 0: Empty-ness of result.
+ *  bit 1: Incompleteness of the task. (ie. still readable, retry-able, blocked)
  *
- * □ 結果の存在・不在
- * □ 完了・未完
+ * In other words,
+ *   0 means the function returend a result and it is finished.
+ *   1 means it returned no result and it is finished.
+ *   2 means it returend a result and you can still call it later.
+ *   3 means it returned no result and you can try it later.
  *
- * の区別を 2bit にエンコード。異常時は const char* がそのまま入る。
+ * For error cases, this object just hold "char *". This string should be
+ * statically allocated in a similar manner of assert().
+ *
+ * This class assumes above error message string is not allocated
+ * at 0..3 region. I hope this is true for you too;-)
  * 
  */
 
@@ -57,7 +64,7 @@ __BEGIN_DECLS
 typedef struct rcobj_tag {
   union {
 	char* message;
-	unsigned long code; // LP64. size_t にするべきか？ でも依存を増やすのは嫌。
+	unsigned long code; // Expect LP64, ILP32. XXX: Not sure for IL32P64.
   } u;
 } rcobj_t;
 
@@ -173,7 +180,7 @@ struct rcobj : public rcobj_t {
 	return true;
   }
 
-  // デバッグ時には rcobj::breakpoint に break を設定しておくと好都合。
+  // Debugging aid.
   static void breakpoint() {
 	;
   }
@@ -215,9 +222,9 @@ struct rcobj : public rcobj_t {
 #define RET_BLOCKED return rcobj(rcobj::BLOCKED)
 
 #ifdef NDEBUG
-#define EO_ASSERT(e)
+#define RET_ASSERT(e)
 #else//NDEBUG
-#define EO_ASSERT(e) if (! (e)) RET_ERROR("Assertion '" #e "' failed")
+#define RET_ASSERT(e) if (! (e)) RET_ERROR("Assertion '" #e "' failed")
 #endif//NDEBUG
 
 #endif//__cplusplus
