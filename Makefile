@@ -1,5 +1,7 @@
 # Flags passed to the C++ compiler.
 CXXFLAGS += -g -Wall -I.
+# For lambda.
+CXXFLAGS += -std=c++11
 # -Wextra
 LDLIBS += -lpthread -lgtest
 CC = g++
