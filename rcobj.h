@@ -63,7 +63,7 @@ __BEGIN_DECLS
 
 typedef struct rcobj_tag {
   union {
-	char* message;
+	const char* message;
 	unsigned long code; // Expect LP64, ILP32. XXX: Not sure for IL32P64.
   } u;
 } rcobj_t;
@@ -171,7 +171,7 @@ struct rcobj : public rcobj_t {
   }
   bool has_no_results(rcobj* err) const { return has_no_results(*err);  }
   bool has_error() const { return is_error(); }
-  bool has_error(char** msg) const {
+  bool has_error(const char** msg) const {
 	if (! is_error()) {
 	  *msg = 0;
 	  return false;
@@ -185,9 +185,9 @@ struct rcobj : public rcobj_t {
 	;
   }
   //
-  char* str() const { return is_error() ? u.message : 0; }
+  const char* str() const { return is_error() ? u.message : 0; }
   // operator char*() const { return str(); } // (conflicts to op void*())
-  char* code_str() const {
+  const char* code_str() const {
 	if (is_error())
 	  return "ERROR";
 	switch (u.code) {
@@ -201,7 +201,7 @@ struct rcobj : public rcobj_t {
   }
   //
   bool operator!() const { return is_ng(); }
-  operator void*() const { return (void*) (is_ok() ? 1 : 0); }
+  operator void*() const { return (void*) (is_ok() ? 1UL : 0UL); }
 };
 
 #define RCOBJ_STR(x) RCOBJ_XSTR(x)

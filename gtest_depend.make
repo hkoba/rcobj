@@ -1,0 +1,1 @@
+TESTS += rcobj_gtest
