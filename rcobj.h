@@ -230,6 +230,8 @@ struct rcobj : public rcobj_t {
 #define RET_ASSERT(e) if (! (e)) RET_ERROR("Assertion '" #e "' failed")
 #endif//NDEBUG
 
+#define RET_UNLESS(e) if (! (e)) RET_ERROR("Prereq '" #e "' failed")
+
 #endif//__cplusplus
 
 #endif//__RCOBJ_H__
