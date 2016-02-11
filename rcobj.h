@@ -216,10 +216,13 @@ struct rcobj : public rcobj_t {
 #define RET_OK_CONTINUE return rcobj(rcobj::OK_CONTINUE)
 
 #define RET_NG_DONE  return rcobj(rcobj::NG_DONE)
-#define RET_NG_RETRY return rcobj(rcobj::NG_RETRY)
+#define RET_EOF      return rcobj(rcobj::NG_EOF)
 
-#define RET_EOF     return rcobj(rcobj::NG_EOF)
-#define RET_BLOCKED return rcobj(rcobj::BLOCKED)
+#define RET_NG_CONT  return rcobj(rcobj::NG_CONT)
+#define RET_NG_RETRY return rcobj(rcobj::NG_RETRY)
+#define RET_NG_BLOCKED  return rcobj(rcobj::NG_BLOCKED)
+#define RET_BLOCKED  return rcobj(rcobj::BLOCKED)
+
 
 #ifdef NDEBUG
 #define RET_ASSERT(e)

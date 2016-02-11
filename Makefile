@@ -6,7 +6,8 @@ CXXFLAGS += -std=c++11
 LDLIBS += -lpthread -lgtest
 CC = g++
 
-.PHONY: test
+.PHONY: all
+all: test
 
 include gtest_depend.make
 
