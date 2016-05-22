@@ -222,7 +222,9 @@ struct rcobj : public rcobj_t {
 #define RET_NG_RETRY return rcobj(rcobj::NG_RETRY)
 #define RET_NG_BLOCKED  return rcobj(rcobj::NG_BLOCKED)
 #define RET_BLOCKED  return rcobj(rcobj::BLOCKED)
-
+  
+#define RET_NOT_IMPLEMENTED return RCOBJ("Not implemented!")
+#define RET_NIMPL RET_NOT_IMPLEMENTED
 
 #ifdef NDEBUG
 #define RET_ASSERT(e)
